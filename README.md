@@ -26,4 +26,4 @@ Pop something from your q:
 
 Add something to your q:
 
-	$ q learn rust
+	$ rq learn rust
