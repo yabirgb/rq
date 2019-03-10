@@ -5,10 +5,8 @@ use std::time::SystemTime;
 use std::path::Path;
 use std::fs;
 use std::env;
-use std::process;
 use serde::{Serialize, Deserialize};
-
-use serde_json::{Value};
+use dirs::home_dir;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Note {
@@ -25,7 +23,7 @@ fn load_file(fpath:&String, name: &String ) -> String{
     
     let mut file;
     
-    let path = Path::new(&env::home_dir().unwrap()).join(fpath);
+    let path = Path::new(&home_dir().unwrap()).join(fpath);
     let file_path = path.join(name);   
     // Check if the file exists
     if !path.exists(){
@@ -48,7 +46,7 @@ fn load_file(fpath:&String, name: &String ) -> String{
 }
 
 fn write_to_file(data:String, fpath:&String, name: &String) -> std::io::Result<()>{
-    let path = Path::new(&env::home_dir().unwrap()).join(fpath);
+    let path = Path::new(&home_dir().unwrap()).join(fpath);
     let file_path = path.join(name);
     write(file_path, data);
     
@@ -80,7 +78,7 @@ fn main(){
         }
         
     }else{
-        let text = &args[1];
+        let text = args.into_iter().skip(1).collect::<Vec<String>>().join(" ");
         let note = Note {
             text: text.to_string(),
             time_created: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap()
